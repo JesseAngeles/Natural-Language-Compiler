@@ -7,7 +7,10 @@
 #include "./include/Import.h"
 #include "./include/Print.h"
 #include "./include/Variable.h"
+#include "./include/Condition.h"
 #include "./include/IfSentence.h"
+#include "./include/DoWhileSentence.h"
+#include "./include/WhileSentence.h"
 
 #include "./src/Middleware/Normalize.cpp"
 
@@ -30,19 +33,28 @@ int main()
 
     // Arreglo de instrucciones
     std::vector<std::unique_ptr<Instruction>> instructions;
+
     std::vector<std::unique_ptr<Instruction>> if_instructions;
     std::vector<std::unique_ptr<Instruction>> else_instructions;
+    std::vector<std::unique_ptr<Instruction>> do_while_instructions;
 
+    Condition condition("1", Comparator::Different, "2");
+
+    // Sentencia if
     if_instructions.push_back(std::make_unique<Print>("Hola"));
     else_instructions.push_back(std::make_unique<Print>("Adios"));
-    IfSentence ifSentence("1 == 1", std::move(if_instructions), std::move(else_instructions));
+    IfSentence ifSentence(condition, std::move(if_instructions), std::move(else_instructions));
+
+    // Sentencias do_while
+    do_while_instructions.push_back(std::make_unique<Print>("ciclo do while 1"));
+    do_while_instructions.push_back(std::make_unique<Print>("ciclo do while 2"));
+    WhileSentence doWhileSentence(condition, std::move(do_while_instructions));    
 
     instructions.push_back(std::make_unique<Variable>(Type::Int, "var1"));
     instructions.push_back(std::make_unique<Variable>(Type::Int, "var2", "21"));
     instructions.push_back(std::make_unique<Print>("Hola mundo"));
     instructions.push_back(std::make_unique<IfSentence>(std::move(ifSentence)));
-
-
+    instructions.push_back(std::make_unique<WhileSentence>(std::move(doWhileSentence)));
 
     // Puedes añadir otras instrucciones aquí
 
@@ -98,7 +110,6 @@ vector<string> buildCode(set<Import> imports, const vector<unique_ptr<Instructio
             imports.insert(Import("iostream"));
             break;
         }
-
 
     vector<string> code;
 
