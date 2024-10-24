@@ -1,0 +1,2 @@
+clear
+./build/main.exe
