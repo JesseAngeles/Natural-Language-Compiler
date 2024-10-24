@@ -6,6 +6,7 @@
 
 enum class Type
 {
+    Bool,
     Int,
     Float,
     Char
@@ -16,11 +17,11 @@ class Variable : public Instruction
 private:
     Type type;
     std::string name;
-    std::string initValue;
+    std::string value;
 
 public:
     // Constructor
-    Variable(Type type, std::string name, std::string initValue = "") : type(type), name(name), initValue(initValue) {}
+    Variable(Type type, std::string name, std::string value = "") : type(type), name(name), value(value) {}
 
     // Getters
     Type getType() const { return type; }
@@ -33,21 +34,21 @@ public:
     std::string get() override
     {
         // Convertir Type a string para la salida
-        std::string typeName;
+        std::string type_name;
         switch (type)
         {
         case Type::Int:
-            typeName = "int";
+            type_name = "int";
             break;
         case Type::Float:
-            typeName = "float";
+            type_name = "float";
             break;
         case Type::Char:
-            typeName = "char";
+            type_name = "char";
             break;
         }
 
-        return typeName + ' ' + name + ((!initValue.empty()) ? " = " + initValue : "") + ';';
+        return type_name + ' ' + name + ((!value.empty()) ? " = " + value : "") + ';';
     }
 };
 

@@ -7,6 +7,7 @@
 #include "./include/Import.h"
 #include "./include/Print.h"
 #include "./include/Variable.h"
+#include "./include/IfSentence.h"
 
 #include "./src/Middleware/Normalize.cpp"
 
@@ -27,13 +28,22 @@ int main()
     // Arreglos de estructuras
     std::set<Import> imports;
 
-    // Arreglo de impresiones usando punteros únicos
+    // Arreglo de instrucciones
     std::vector<std::unique_ptr<Instruction>> instructions;
+    std::vector<std::unique_ptr<Instruction>> if_instructions;
+    std::vector<std::unique_ptr<Instruction>> else_instructions;
+
+    if_instructions.push_back(std::make_unique<Print>("Hola"));
+    else_instructions.push_back(std::make_unique<Print>("Adios"));
+    IfSentence ifSentence("1 == 1", std::move(if_instructions), std::move(else_instructions));
 
     instructions.push_back(std::make_unique<Variable>(Type::Int, "var1"));
     instructions.push_back(std::make_unique<Variable>(Type::Int, "var2", "21"));
     instructions.push_back(std::make_unique<Print>("Hola mundo"));
-    
+    instructions.push_back(std::make_unique<IfSentence>(std::move(ifSentence)));
+
+
+
     // Puedes añadir otras instrucciones aquí
 
     // Construir el código
